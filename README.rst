@@ -16,7 +16,7 @@ They have these requirements:
 
 - fzy [https://github.com/jhawthorn/fzy](https://github.com/jhawthorn/fzy),
   modified and included as submodule
-- fpinfo.sh: pinfo (prezmek info viewer)
+- fpinfo.sh: pinfo (prezmek info viewer) [https://github.com/baszoetekouw/pinfo](https://github.com/baszoetekouw/pinfo)
 
 
 For fulltext searches, I personally prefer the "silver_searcher".

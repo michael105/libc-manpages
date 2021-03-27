@@ -1,0 +1,744 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of SIGNAL</TITLE>
+</HEAD><BODY>
+<H1>SIGNAL</H1>
+Section: C Library Functions (3)<BR><A HREF="#index">Index</A>
+<A HREF="http://localhost/cgi-bin/man/man2html">Return to Main Contents</A><HR>
+<BR>BSD mandoc<BR>
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+
+
+<B>signal</B>
+
+ - simplified software signal facilities
+
+<A NAME="lbAC">&nbsp;</A>
+<H2>LIBRARY</H2>
+
+Lb libc
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+In signal.h
+
+
+
+Ft void
+
+Fn *signal int sig void *funcintint
+
+<P>
+
+or in
+Fx Ap s
+
+equivalent but easier to read typedef'd version:
+Ft typedef void *sig_t int ;
+
+<P>
+
+Ft sig_t
+
+Fn signal int sig sig_t func
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+This
+Fn signal
+
+facility
+is a simplified interface to the more general
+<A HREF="http://localhost/cgi-bin/man/man2html?2+sigaction">sigaction</A>(2)
+
+
+facility.
+<P>
+
+Signals allow the manipulation of a process from outside its
+domain as well as allowing the process to manipulate itself or
+copies of itself (children).
+There are two general types of signals:
+those that cause termination of a process and those that do not.
+Signals which cause termination of a program might result from
+an irrecoverable error or might be the result of a user at a terminal
+typing the `interrupt' character.
+Signals are used when a process is stopped because it wishes to access
+its control terminal while in the background (see
+<A HREF="http://localhost/cgi-bin/man/man2html?4+tty">tty</A>(4)).
+
+
+Signals are optionally generated
+when a process resumes after being stopped,
+when the status of child processes changes,
+or when input is ready at the control terminal.
+Most signals result in the termination of the process receiving them
+if no action
+is taken; some signals instead cause the process receiving them
+to be stopped, or are simply discarded if the process has not
+requested otherwise.
+Except for the
+<B>SIGKILL</B>
+
+and
+<B>SIGSTOP</B>
+
+signals, the
+Fn signal
+
+function allows for a signal to be caught, to be ignored, or to generate
+an interrupt.
+These signals are defined in the file
+In signal.h :
+
+<DL COMPACT>
+<P>
+
+<DT><B>Num Ta </B><B>Name Ta </B><B>Default Action Ta </B><B>Description</B>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>1 Ta </B><B>SIGHUP Ta </B>terminate process Ta terminal line hangup
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>2 Ta </B><B>SIGINT Ta </B>terminate process Ta interrupt program
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>3 Ta </B><B>SIGQUIT Ta </B>create core image Ta quit program
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>4 Ta </B><B>SIGILL Ta </B>create core image Ta illegal instruction
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>5 Ta </B><B>SIGTRAP Ta </B>create core image Ta trace trap
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>6 Ta </B><B>SIGABRT Ta </B>create core image Ta abort program
+
+
+
+
+
+
+
+
+<DD>
+(formerly
+<B>SIGIOT</B>
+
+ 
+<DT><B>7 Ta </B><B>SIGEMT Ta </B>create core image Ta emulate instruction executed
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>8 Ta </B><B>SIGFPE Ta </B>create core image Ta floating-point exception
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>9 Ta </B><B>SIGKILL Ta </B>terminate process Ta kill program
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>10 Ta </B><B>SIGBUS Ta </B>create core image Ta bus error
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>11 Ta </B><B>SIGSEGV Ta </B>create core image Ta segmentation violation
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>12 Ta </B><B>SIGSYS Ta </B>create core image Ta non-existent system call invoked
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>13 Ta </B><B>SIGPIPE Ta </B>terminate process Ta write on a pipe with no reader
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>14 Ta </B><B>SIGALRM Ta </B>terminate process Ta real-time timer expired
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>15 Ta </B><B>SIGTERM Ta </B>terminate process Ta software termination signal
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>16 Ta </B><B>SIGURG Ta </B>discard signal Ta urgent condition present on socket
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>17 Ta </B><B>SIGSTOP Ta </B>stop process Ta stop (cannot be caught or ignored)
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>18 Ta </B><B>SIGTSTP Ta </B>stop process Ta stop signal generated from keyboard
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>19 Ta </B><B>SIGCONT Ta </B>discard signal Ta continue after stop
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>20 Ta </B><B>SIGCHLD Ta </B>discard signal Ta child status has changed
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>21 Ta </B><B>SIGTTIN Ta </B>stop process Ta background read attempted from
+
+
+
+
+
+
+
+
+<DD>
+control terminal
+<DT><B>22 Ta </B><B>SIGTTOU Ta </B>stop process Ta background write attempted to
+
+
+
+
+
+
+
+
+<DD>
+control terminal
+<DT><B>23 Ta </B><B>SIGIO Ta </B>discard signal Ta <B>I/O</B>
+
+
+
+
+
+
+
+
+
+
+<DD>
+is possible on a descriptor (see
+<A HREF="http://localhost/cgi-bin/man/man2html?2+fcntl">fcntl</A>(2))
+
+
+<DT><B>24 Ta </B><B>SIGXCPU Ta </B>terminate process Ta cpu time limit exceeded (see
+
+
+
+
+
+
+
+
+<DD>
+<A HREF="http://localhost/cgi-bin/man/man2html?2+setrlimit">setrlimit</A>(2))
+
+
+<DT><B>25 Ta </B><B>SIGXFSZ Ta </B>terminate process Ta file size limit exceeded (see
+
+
+
+
+
+
+
+
+<DD>
+<A HREF="http://localhost/cgi-bin/man/man2html?2+setrlimit">setrlimit</A>(2))
+
+
+<DT><B>26 Ta </B><B>SIGVTALRM Ta </B>terminate process Ta virtual time alarm (see
+
+
+
+
+
+
+
+
+<DD>
+<A HREF="http://localhost/cgi-bin/man/man2html?2+setitimer">setitimer</A>(2))
+
+
+<DT><B>27 Ta </B><B>SIGPROF Ta </B>terminate process Ta profiling timer alarm (see
+
+
+
+
+
+
+
+
+<DD>
+<A HREF="http://localhost/cgi-bin/man/man2html?2+setitimer">setitimer</A>(2))
+
+
+<DT><B>28 Ta </B><B>SIGWINCH Ta </B>discard signal Ta Window size change
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>29 Ta </B><B>SIGINFO Ta </B>discard signal Ta status request from keyboard
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>30 Ta </B><B>SIGUSR1 Ta </B>terminate process Ta User defined signal 1
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>31 Ta </B><B>SIGUSR2 Ta </B>terminate process Ta User defined signal 2
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>32 Ta </B><B>SIGTHR Ta </B>terminate process Ta thread interrupt
+
+
+
+
+
+
+
+
+<DD>
+<DT><B>33 Ta </B><B>SIGLIBRT Ta </B>terminate process Ta real-time library interrupt
+
+
+
+
+
+
+
+
+<DD>
+</DL>
+<P>
+
+<P>
+
+The
+Fa sig
+
+argument specifies which signal was received.
+The
+Fa func
+
+procedure allows a user to choose the action upon receipt of a signal.
+To set the default action of the signal to occur as listed above,
+Fa func
+
+should be
+<B>SIG_DFL</B>
+
+ 
+A
+<B>SIG_DFL</B>
+
+resets the default action.
+To ignore the signal
+Fa func
+
+should be
+<B>SIG_IGN</B>
+
+ 
+This will cause subsequent instances of the signal to be ignored
+and pending instances to be discarded.
+If
+<B>SIG_IGN</B>
+
+is not used,
+further occurrences of the signal are
+automatically blocked and
+Fa func
+
+is called.
+<P>
+
+The handled signal is unblocked when the
+function returns and
+the process continues from where it left off when the signal occurred.
+Bf -symbolic
+
+Unlike previous signal facilities, the handler
+func() remains installed after a signal has been delivered.
+Ef <P>
+
+
+
+For some system calls, if a signal is caught while the call is
+executing and the call is prematurely terminated,
+the call is automatically restarted.
+Any handler installed with
+<A HREF="http://localhost/cgi-bin/man/man2html?3+signal">signal</A>(3)
+
+
+will have the
+<B>SA_RESTART</B>
+
+flag set, meaning that any restartable system call will not return on
+receipt of a signal.
+The affected system calls include
+<A HREF="http://localhost/cgi-bin/man/man2html?2+read">read</A>(2),
+
+
+<A HREF="http://localhost/cgi-bin/man/man2html?2+write">write</A>(2),
+
+
+<A HREF="http://localhost/cgi-bin/man/man2html?2+sendto">sendto</A>(2),
+
+
+<A HREF="http://localhost/cgi-bin/man/man2html?2+recvfrom">recvfrom</A>(2),
+
+
+<A HREF="http://localhost/cgi-bin/man/man2html?2+sendmsg">sendmsg</A>(2)
+
+
+and
+<A HREF="http://localhost/cgi-bin/man/man2html?2+recvmsg">recvmsg</A>(2)
+
+
+on a communications channel or a low speed device
+and during a
+<A HREF="http://localhost/cgi-bin/man/man2html?2+ioctl">ioctl</A>(2)
+
+
+or
+<A HREF="http://localhost/cgi-bin/man/man2html?2+wait">wait</A>(2).
+
+
+However, calls that have already committed are not restarted,
+but instead return a partial success (for example, a short read count).
+These semantics could be changed with
+<A HREF="http://localhost/cgi-bin/man/man2html?3+siginterrupt">siginterrupt</A>(3).
+
+
+<P>
+
+When a process which has installed signal handlers forks,
+the child process inherits the signals.
+All caught signals may be reset to their default action by a call
+to the
+<A HREF="http://localhost/cgi-bin/man/man2html?2+execve">execve</A>(2)
+
+
+function;
+ignored signals remain ignored.
+<P>
+
+If a process explicitly specifies
+<B>SIG_IGN</B>
+
+as the action for the signal
+<B>SIGCHLD</B>
+
+ 
+the system will not create zombie processes when children
+of the calling process exit.
+As a consequence, the system will discard the exit status
+from the child processes.
+If the calling process subsequently issues a call to
+<A HREF="http://localhost/cgi-bin/man/man2html?2+wait">wait</A>(2)
+
+
+or equivalent, it will block until all of the calling process's
+children terminate, and then return a value of -1 with
+<I>errno</I>
+
+set to
+Er ECHILD .
+
+<P>
+
+See
+<A HREF="http://localhost/cgi-bin/man/man2html?2+sigaction">sigaction</A>(2)
+
+
+for a list of functions
+that are considered safe for use in signal handlers.
+<A NAME="lbAF">&nbsp;</A>
+<H2>RETURN VALUES</H2>
+
+The previous action is returned on a successful call.
+Otherwise, SIG_ERR is returned and the global variable
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAG">&nbsp;</A>
+<H2>ERRORS</H2>
+
+The
+Fn signal
+
+function
+will fail and no action will take place if one of the
+following occur:
+<DL COMPACT>
+<P>
+
+<DT><B>Bq </B>Er EINVAL
+
+
+
+
+<DD>
+The
+Fa sig
+
+argument
+is not a valid signal number.
+<DT><B>Bq </B>Er EINVAL
+
+
+
+
+<DD>
+An attempt is made to ignore or supply a handler for
+<B>SIGKILL</B>
+
+or
+<B>SIGSTOP</B>
+
+ 
+</DL>
+<P>
+
+<A NAME="lbAH">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<A HREF="http://localhost/cgi-bin/man/man2html?1+kill">kill</A>(1),
+
+
+<A HREF="http://localhost/cgi-bin/man/man2html?2+kill">kill</A>(2),
+
+
+<A HREF="http://localhost/cgi-bin/man/man2html?2+ptrace">ptrace</A>(2),
+
+
+<A HREF="http://localhost/cgi-bin/man/man2html?2+sigaction">sigaction</A>(2),
+
+
+<A HREF="http://localhost/cgi-bin/man/man2html?2+sigaltstack">sigaltstack</A>(2),
+
+
+<A HREF="http://localhost/cgi-bin/man/man2html?2+sigprocmask">sigprocmask</A>(2),
+
+
+<A HREF="http://localhost/cgi-bin/man/man2html?2+sigsuspend">sigsuspend</A>(2),
+
+
+<A HREF="http://localhost/cgi-bin/man/man2html?2+wait">wait</A>(2),
+
+
+<A HREF="http://localhost/cgi-bin/man/man2html?3+fpsetmask">fpsetmask</A>(3),
+
+
+<A HREF="http://localhost/cgi-bin/man/man2html?3+setjmp">setjmp</A>(3),
+
+
+<A HREF="http://localhost/cgi-bin/man/man2html?3+siginterrupt">siginterrupt</A>(3),
+
+
+<A HREF="http://localhost/cgi-bin/man/man2html?4+tty">tty</A>(4)
+
+
+<A NAME="lbAI">&nbsp;</A>
+<H2>HISTORY</H2>
+
+The
+Fn signal
+
+function appeared in
+AT&amp;T System
+v4 .
+The current
+<B></B>
+
+
+facility appeared in
+BSD 4.0
+ 
+The option to avoid the creation of child zombies through ignoring
+<B>SIGCHLD</B>
+
+appeared in
+Fx 5.0 .
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">LIBRARY</A><DD>
+<DT><A HREF="#lbAD">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAE">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAF">RETURN VALUES</A><DD>
+<DT><A HREF="#lbAG">ERRORS</A><DD>
+<DT><A HREF="#lbAH">SEE ALSO</A><DD>
+<DT><A HREF="#lbAI">HISTORY</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://localhost/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 04:32:22 GMT, May 25, 2020
+</BODY>
+</HTML>

@@ -1,0 +1,22 @@
+These are pages from POSIX.1-2008, Technical Corrigendum 1.
+Since TC1 appeared in 2013, it is also known as POSIX.1-2013.
+
+This package contains the POSIX man pages (pages in sections
+except 0p, 1p, and 3p). Some more information is given in the
+`Announce' file.  Some background on UNIX standards, including
+POSIX, can be found in the standards(7) page provide as part
+of the separate Linux man-pages package.
+
+Install by copying to your favourite location.
+"make install" will just copy them to /usr/share/man/man[013]p.
+"make" will move the pages from this package that are older than
+the already installed ones to a subdirectory `not_installed',
+then remove old versions (compressed or not),
+compress the pages, and copy them to /usr/share/man/man[013]p.
+
+Note that you may have to remove preformatted pages.
+
+Copyrights: see the file POSIX-COPYRIGHT.
+
+If you have corrections and additions to suggest, then visit
+https://www.kernel.org/doc/man-pages/reporting_bugs.html
